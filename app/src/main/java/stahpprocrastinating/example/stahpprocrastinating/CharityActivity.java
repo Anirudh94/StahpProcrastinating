@@ -1,4 +1,4 @@
-package com.example.chen.stahpprocrastinating;
+package stahpprocrastinating.example.stahpprocrastinating;
 
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +43,7 @@ public class CharityActivity extends ActionBarActivity {
         goNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goNext = new Intent(getBaseContext(), MainActivity.class);
+                Intent goNext = new Intent(getBaseContext(), ListGoalsActivity.class);
                 startActivity(goNext);
             }
         });

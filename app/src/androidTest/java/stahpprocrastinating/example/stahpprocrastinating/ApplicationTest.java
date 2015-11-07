@@ -1,4 +1,4 @@
-package com.example.stahpprocrastinating;
+package stahpprocrastinating.example.stahpprocrastinating;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

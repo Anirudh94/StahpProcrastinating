@@ -1,9 +1,9 @@
-package com.example.chen.stahpprocrastinating;
+package stahpprocrastinating.example.stahpprocrastinating;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,13 +16,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+// Add this to the header of your file:
 
-public class MainActivity extends ActionBarActivity {
+
+public class ListGoalsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        // Initialize the SDK before executing any other operations,
+        // especially, if you're using Facebook UI elements.
+        setContentView(R.layout.activity_goals_template);
+
 
         ListView listView = (ListView) findViewById(R.id.listView);
 

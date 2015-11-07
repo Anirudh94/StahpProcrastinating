@@ -1,4 +1,4 @@
-package com.example.chen.stahpprocrastinating;
+package stahpprocrastinating.example.stahpprocrastinating;
 
 /**
  * Created by Chen on 2015-11-07.

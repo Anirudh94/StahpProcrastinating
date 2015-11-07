@@ -3,6 +3,11 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_goals">Select Charities</string>
+    <string name="facebook_app_id">520084741474824</string>
+    <string name="title_activity_log_in">LogInActivity</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>
