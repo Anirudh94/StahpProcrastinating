@@ -2,12 +2,15 @@ package stahpprocrastinating.example.stahpprocrastinating;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.braintreepayments.api.Braintree;
 import com.braintreepayments.api.dropin.BraintreePaymentActivity;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -43,6 +46,13 @@ public class MainActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
+                updateWithToken(newAccessToken);
+            }
+        };
+        updateWithToken(AccessToken.getCurrentAccessToken());
         setContentView(R.layout.activity_main);
         loginBtn = (LoginButton) findViewById(R.id.login_button);
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -54,11 +64,21 @@ public class MainActivity extends FragmentActivity {
         getClientToken();
     }
 
+    private void showNextActivity() {
+        Intent goNext = new Intent(getBaseContext(), ListGoalsActivity.class);
+        startActivity(goNext);
+    }
+
+    private void updateWithToken(AccessToken currentAccessToken) {
+        if (currentAccessToken != null) {
+            showNextActivity();
+        }
+    }
+
     private void onFbLogin() {
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile"));
-
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -86,6 +106,9 @@ public class MainActivity extends FragmentActivity {
                                                 // save to mongodb here
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
+                                            } finally {
+                                                // TODO: CHECK IF USER IS IN DATABASE ALREADY
+                                                onBraintreeSubmit();
                                             }
                                         }
                                     }
@@ -104,30 +127,17 @@ public class MainActivity extends FragmentActivity {
 
                     }
                 });
-
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PAYMENT_AUTH_REQ) {
-            if (resultCode == BraintreePaymentActivity.RESULT_OK) {
-                String nonce = data.getStringExtra(
-                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
-                );
-                postNonceToServer(nonce);
-
-                Intent goNext = new Intent(getBaseContext(), ListGoalsActivity.class);
-                startActivity(goNext);
-            }
+        if (requestCode == PAYMENT_AUTH_REQ && resultCode == BraintreePaymentActivity.RESULT_OK) {
+            String nonce = data.getStringExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE);
+            postNonceToServer(nonce);
+            showNextActivity();
         } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
-
-            // TODO: CHECK IF USER IS IN DATABASE ALREADY
-            //call paypal next
-            onBraintreeSubmit();
         }
     }
 
