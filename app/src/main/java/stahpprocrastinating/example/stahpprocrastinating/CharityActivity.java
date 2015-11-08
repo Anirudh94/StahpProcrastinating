@@ -26,7 +26,7 @@ public class CharityActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goals);
+        setContentView(R.layout.activity_charities);
     }
 
     @Override

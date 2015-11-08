@@ -1,5 +1,6 @@
 package stahpprocrastinating.example.stahpprocrastinating;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -65,13 +66,17 @@ public class MainActivity extends FragmentActivity {
                                                 String jsonresult = String.valueOf(json);
                                                 System.out.println("JSON Result" + jsonresult);
 
-                                                String str_email = json.getString("email");
+//                                                String str_email = json.getString("email");
                                                 String str_id = json.getString("id");
-                                                String str_firstname = json.getString("first_name");
-                                                String str_lastname = json.getString("last_name");
+                                                String str_name = json.getString("name");
 
+                                                // save to mongodb here
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
+                                            }
+                                            finally {
+                                                Intent goNext = new Intent(getBaseContext(), ListGoalsActivity.class);
+                                                startActivity(goNext);
                                             }
                                         }
                                     }
@@ -91,6 +96,15 @@ public class MainActivity extends FragmentActivity {
                     }
                 });
 
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 

@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".CharityActivity"
-            android:label="@string/title_activity_goals" >
+            android:label="Select Charities" >
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -34,13 +34,13 @@
 
         <activity
             android:name=".ListGoalsActivity"
-            android:label="@string/title_activity_login"
+            android:label="My Goals"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NewGoalActivity"
+            android:label="@string/title_activity_new_goal"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

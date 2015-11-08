@@ -24,11 +24,7 @@ public class ListGoalsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize the SDK before executing any other operations,
-        // especially, if you're using Facebook UI elements.
         setContentView(R.layout.activity_goals_template);
-
-
         ListView listView = (ListView) findViewById(R.id.listView);
 
         ArrayList<Goal> goals = new ArrayList<Goal>();
@@ -52,7 +48,7 @@ public class ListGoalsActivity extends ActionBarActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goNext = new Intent(getBaseContext(), CharityActivity.class);
+                Intent goNext = new Intent(getBaseContext(), NewGoalActivity.class);
                 startActivity(goNext);
 
             }
