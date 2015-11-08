@@ -6,12 +6,15 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -44,7 +47,7 @@ public class MainActivity extends FragmentActivity {
     private void onFbLogin() {
         callbackManager = CallbackManager.Factory.create();
 
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_friends", "public_profile","read_custom_friendlists"));
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -55,7 +58,7 @@ public class MainActivity extends FragmentActivity {
                         GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                                     @Override
-                                    public void onCompleted(JSONObject json, GraphResponse response) {
+                                    public void onCompleted(final JSONObject json, GraphResponse response) {
                                         if (response.getError() != null) {
                                             // handle error
                                             System.out.println("ERROR");
@@ -63,18 +66,43 @@ public class MainActivity extends FragmentActivity {
                                             System.out.println("Success");
                                             try {
 
+
                                                 String jsonresult = String.valueOf(json);
                                                 System.out.println("JSON Result" + jsonresult);
 
 //                                                String str_email = json.getString("email");
                                                 String str_id = json.getString("id");
                                                 String str_name = json.getString("name");
+                                                GraphRequestAsyncTask async = new GraphRequest(
+                                                        AccessToken.getCurrentAccessToken(),
+                                                        "/"+str_id+"/friendlists",
+                                                        null,
+                                                        HttpMethod.GET,
+                                                        new GraphRequest.Callback() {
+                                                            public void onCompleted(GraphResponse response) {
+                                                                JSONObject json_result = response.getJSONObject();
+                                                                try {
+                                                                    global.facebook_friends = json_result.getJSONArray("data");
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                                //getJSONObject("data");
+
+                                                                //        getJSONArray("data");
+
+
+//                                                                        getJSONObject("paging").getString("next");
+
+            /* handle the result */
+                                                            }
+                                                        }
+                                                ).executeAsync();
+
 
                                                 // save to mongodb here
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
-                                            }
-                                            finally {
+                                            } finally {
                                                 Intent goNext = new Intent(getBaseContext(), ListGoalsActivity.class);
                                                 startActivity(goNext);
                                             }
